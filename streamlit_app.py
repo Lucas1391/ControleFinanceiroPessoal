@@ -126,9 +126,5 @@ def Main(n,l,M):
 
 #Input do Método 
 st.header("APLICAÇÃO WEB PARA CÁLCULO DE MODOS QUASENORMAIS DE BURACOS NEGROS")
-number = 1
-n = 0
-M = 1
-l = 2
-while true
+
 
