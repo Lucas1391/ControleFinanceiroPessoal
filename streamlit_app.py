@@ -125,6 +125,8 @@ def Main(n,l,M):
     return w1
 
 #Input do Método 
-st.header("APLICAÇÃO WEB PARA CÁLCULO DE MODOS QUASENORMAIS DE BURACOS NEGROS")
+st.header("APLICAÇÃO WEB PARA CÁLCULO DE MODOS QUASINORMAIS DE BURACOS NEGROS")
+st.slider("Digite a quantidade de valores de n desejada : ")
+
 
 
