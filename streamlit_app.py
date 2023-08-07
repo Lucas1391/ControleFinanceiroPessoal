@@ -146,7 +146,7 @@ if l is not  0:
     for i in indice_n:
         for j in indice_l:
             coluna1.append(i)
-            coluna2.apppend(j)
+            coluna2.append(j)
             indice_z.append(Main(i,j,M))
     Modos_Trabalho['n'] =  coluna1
     Modos_Trabalho['l'] =  coluna2
