@@ -125,20 +125,5 @@ def Main(n,l,M):
     return w1
 
 #Input do Método 
-"""M = 1.00
-n = [0,1]
-l = [2,3]
-Modos_Trabalho = pd.DataFrame()
-indice_n = []
-indice_l = []
-indice_z = []
-for i in n:
-    for j in l:
-        indice_l.append(j)
-        indice_n.append(i)
-        indice_z.append(Main(i,j,M))
-Modos_Trabalho['n'] = indice_n
-Modos_Trabalho['l'] =  indice_l
-Modos_Trabalho['z'] = indice_z
-print(Modos_Trabalho)"""
 st.title("APLICAÇÃO WEB PARA CÁLCULO DE MODOS QUASENORMAIS DE BURACOS NEGROS")
+
