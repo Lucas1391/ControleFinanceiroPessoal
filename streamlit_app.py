@@ -128,11 +128,27 @@ def Main(n,l,M):
 st.header("APLICAÇÃO WEB PARA CÁLCULO DE MODOS QUASINORMAIS DE BURACOS NEGROS")
 M = st.number_input('Digite o Valor da Massa do Buraco Negro : ')
 n = st.slider("Selecione a quantidade de valores de n desejada : ")
+Modos_Trabalho = pd.DataFrame()
+indice_n = []
+indice_l = []
+indice_z = []
 if n  is not 0:
     st.write("A Quantidade de valores de n é ", n)
 l = st.slider("Selecione a quantidade de valores de l desejada : ")
 if l is not  0:
     st.write("A Quantidade de valores de l é ", l)
+    for i in n:
+        for j in l:
+            indice_l.append(j)
+            indice_n.append(i)
+            indice_z.append(Main(i,j,M))
+    Modos_Trabalho['n'] = indice_n
+    Modos_Trabalho['l'] =  indice_l
+    Modos_Trabalho['z'] = indice_z
+if len(Modos_Trabalho)!=0:
+    st.dataframe(Modos_Trabalho) 
+    
+
 
 
 
