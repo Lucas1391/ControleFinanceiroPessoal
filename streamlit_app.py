@@ -3,7 +3,6 @@ import numpy as np
 import sympy as sy
 from sympy import solve,log
 import math as mt
-import matplotlib.pyplot as plt
 from scipy.special import lambertw
 import numpy as np
 import pandas as pd
