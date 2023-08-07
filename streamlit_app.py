@@ -133,7 +133,7 @@ indice_n = []
 indice_l = []
 indice_z = []
 coluna1 = []
-coluna_2 = []
+coluna2 = []
 if n  is not 0:
     st.write("A Quantidade de valores de n é ", n)
     for q in range(0,n):
