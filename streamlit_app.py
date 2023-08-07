@@ -134,7 +134,7 @@ indice_l = []
 indice_z = []
 if n  is not 0:
     st.write("A Quantidade de valores de n é ", n)
-    for q in n:
+    for q in range(0,n):
         indice_n.append(q)
 l = st.slider("Selecione a quantidade de valores de l desejada : ")
 if l is not  0:
