@@ -146,7 +146,7 @@ if l is not  0:
             indice_z.append(Main(i,j,M))
     Modos_Trabalho['n'] = indice_n
     Modos_Trabalho['l'] =  indice_l
-    Modos_Trabalho['z'] = indice_z
+    #Modos_Trabalho['z'] = [indice_z]
 if len(Modos_Trabalho)!=0:
     st.dataframe(Modos_Trabalho) 
     
