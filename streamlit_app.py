@@ -126,7 +126,7 @@ def Main(n,l,M):
 
 #Input do Método 
 st.header("APLICAÇÃO WEB PARA CÁLCULO DE MODOS QUASINORMAIS DE BURACOS NEGROS")
-M = st.number_input('Digite o Valor da Massa do Buraco Negro : ', M )
+M = st.number_input('Digite o Valor da Massa do Buraco Negro : ')
 n = st.slider("Selecione a quantidade de valores de n desejada : ")
 l = st.slider("Selecione a quantidade de valores de l desejada : ")
 
