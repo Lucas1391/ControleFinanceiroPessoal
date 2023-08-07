@@ -132,6 +132,8 @@ Modos_Trabalho = pd.DataFrame()
 indice_n = []
 indice_l = []
 indice_z = []
+coluna1 = []
+coluna_2 = []
 if n  is not 0:
     st.write("A Quantidade de valores de n é ", n)
     for q in range(0,n):
@@ -143,9 +145,11 @@ if l is not  0:
         indice_l.append(p)
     for i in indice_n:
         for j in indice_l:
+            coluna1.append(i)
+            coluna2.apppend(j)
             indice_z.append(Main(i,j,M))
-    Modos_Trabalho['n'] = indice_n
-    Modos_Trabalho['l'] =  indice_l
+    Modos_Trabalho['n'] =  coluna1
+    Modos_Trabalho['l'] =  coluna2
     #Modos_Trabalho['z'] = [indice_z]
 if len(Modos_Trabalho)!=0:
     st.dataframe(Modos_Trabalho) 
