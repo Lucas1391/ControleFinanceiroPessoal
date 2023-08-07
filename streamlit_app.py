@@ -137,8 +137,8 @@ if n  is not 0:
 l = st.slider("Selecione a quantidade de valores de l desejada : ")
 if l is not  0:
     st.write("A Quantidade de valores de l é ", l)
-    for i in range(0,n):
-        for j in range(0,l):
+    for i in range(0,n+1):
+        for j in range(2,l+1):
             indice_l.append(j)
             indice_n.append(i)
             indice_z.append(Main(i,j,M))
