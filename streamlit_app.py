@@ -123,7 +123,12 @@ def Main(n,l,M):
     theta = mt.atan(tg)
     w1 = (modulo**0.5)*(np.cos(0.5*theta)+ 1j*np.sin(0.5*theta))
     return w1
-
+def Resultado(dados):
+    DataFrame = st.dataframe(dados)
+    dados = dados.to_csv()
+    Mensagem = st.write("Clique no Botão abaixo e faça o Download do arquivo")
+    Botao = st.download_button( label="Resultado do Backtest",file_name='Resultado.csv', data = dados)
+    return DataFrame,Mensagem,Botao
 #Input do Método 
 st.header("APLICAÇÃO WEB PARA CÁLCULO DE MODOS QUASINORMAIS DE BURACOS NEGROS")
 M = st.number_input('Digite o Valor da Massa do Buraco Negro : ')
