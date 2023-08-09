@@ -157,6 +157,7 @@ if l is not  0:
     Modos_Trabalho['l'] =  coluna2
     Modos_Trabalho['z'] = indice_z
 if len(Modos_Trabalho)!=0:
+    st.write("Aguardando Cálculos!")
     Resultado(Modos_Trabalho)
     
 
