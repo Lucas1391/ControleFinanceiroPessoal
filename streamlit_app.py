@@ -127,7 +127,7 @@ def Resultado(dados):
     DataFrame = st.dataframe(dados)
     dados = dados.to_csv()
     Mensagem = st.write("Clique no Botão abaixo e faça o Download do arquivo")
-    Botao = st.download_button( label="Resultado do Backtest",file_name='Resultado.csv', data = dados)
+    Botao = st.download_button( label="Planilha de Resultados",file_name='Resultado.csv', data = dados)
     return DataFrame,Mensagem,Botao
 #Input do Método 
 st.header("APLICAÇÃO WEB PARA CÁLCULO DE MODOS QUASINORMAIS DE BURACOS NEGROS")
