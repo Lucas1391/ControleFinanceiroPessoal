@@ -124,7 +124,7 @@ def Main(n,l,M):
     w1 = (modulo**0.5)*(np.cos(0.5*theta)+ 1j*np.sin(0.5*theta))
     return w1
 def Resultado(dados):
-    st.subheader("Planilha de Resultados"!)
+    st.subheader("Planilha de Resultados")
     DataFrame = st.dataframe(dados)
     dados = dados.to_csv()
     Mensagem = st.write("Clique no Botão abaixo e faça o Download do arquivo")
