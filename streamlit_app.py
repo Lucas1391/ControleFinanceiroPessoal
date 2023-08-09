@@ -158,6 +158,7 @@ if l is not  0:
     Modos_Trabalho['z'] = indice_z
 if len(Modos_Trabalho)!=0:
     st.dataframe(Modos_Trabalho) 
+    Resultado(Modos_Trabalho)
     
 
 
