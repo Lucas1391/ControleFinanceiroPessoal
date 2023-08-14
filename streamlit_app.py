@@ -31,7 +31,6 @@ def pot_ef_Turtose(inversa,M,l,x):
     r_t = inversa
     Valor_Pot = pot_ef(r_t,M,l)
     return sy.simplify(Valor_Pot)
-
 #=======================Definindo Funções para Cálculo de Derivada======================================
 def DerivadaPrimeira(Potencial,x):
     return sy.diff(Potencial,x,1)
@@ -45,7 +44,6 @@ def DerivadaQuinta(Potencial,x):
     return sy.diff(Potencial,x,5)
 def DerivadaSexta(Potencial,x):
     return sy.diff(Potencial,x,6)
-
 #==========================Definindo Funções para o Cálculo dos Modos====================================
 def Delta(r,M,l,dr4,dr2,dr3,n):
     alpha = n + 0.5
@@ -86,9 +84,18 @@ def ModosQuaseNormais(Potencial1,x0,n,l,Delta1,Omega1,dr2_1):
     Parte_1_1 = pow(-2.00*dr2_1,0.5)
     Parte_1 = Potencial_0 + Delta1
     Parte_2_1 = pow(-2.00*dr2_1,0.5) 
-    Parte_2 = -1j*(alpha)*(Parte_2_1)*(1.00+Omega1)
+    Parte_2 = -1.00j*(alpha)*(Parte_2_1)*(1.00+Omega1)
     Frequencia = np.array([Parte_1.subs(x,x0),Parte_2.subs(x,x0)])
-    return Frequencia  
+    a = Frequencia[0]
+    b = Frequencia[1] 
+    if type(a) is sy.core.numbers.Float:
+        b = Frequencia[1]/1.00j
+    else:
+        a = Frequencia[0]/1.00j
+    a = round(float(a),8)
+    b = round(float(b),8)
+    w = complex(a,b)
+    return np.sqrt(w)
 #Definindo Função Principal para Determinar Módulos
 def Main(n,l,M):
     Potencial = pot_ef(r,M,l)
@@ -110,19 +117,7 @@ def Main(n,l,M):
     Omega1 = (Omega(x,M,l,dr2,dr3,dr4,dr5,dr6,n))
     Delta1 =(Delta(x,M,l,dr4,dr2,dr3,n))
     w =  (ModosQuaseNormais(Potencial1,x0,n,l,Delta1,Omega1,dr2))
-    a = w[0]
-    b = w[1]
-    if type(a) is sy.core.numbers.Float:
-        b = w[1]/1j
-    else:
-        a = w[0]/1j
-    modulo = ((a**2)+(b**2))**(0.5)
-    cosseno = a/modulo
-    sen = b/modulo
-    tg = b/a
-    theta = mt.atan(tg)
-    w1 = (modulo**0.5)*(np.cos(0.5*theta)+ 1j*np.sin(0.5*theta))
-    return w1
+    return w
 def Resultado(dados):
     st.subheader("Planilha de Resultados")
     DataFrame = st.dataframe(dados)
