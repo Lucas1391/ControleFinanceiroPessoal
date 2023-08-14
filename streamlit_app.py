@@ -126,7 +126,7 @@ def Resultado(dados):
     Botao = st.download_button( label="Planilha de Resultados",file_name='Resultado.csv', data = dados)
     return DataFrame,Mensagem,Botao
 #Input do Método 
-st.header("APLICAÇÃO WEB PARA CÁLCULO DE MODOS QUASINORMAIS DE BURACOS NEGROS")
+st.header("APLICAÇÃO WEB PARA CÁLCULO DE MODOS QUASINORMAIS DE BURACOS NEGROS DE SCHWARZSCHILD")
 M = st.number_input('Digite o Valor da Massa do Buraco Negro : ')
 n = st.slider("Selecione a quantidade de valores de n desejada : ")
 Modos_Trabalho = pd.DataFrame()
