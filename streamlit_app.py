@@ -66,7 +66,7 @@ def Omega(r,M,l,dr2,dr3,dr4,dr5,dr6,n):
     p_2_3 = 51.00 + 100.00*pow(alpha,2)
     Parcela_2 = (1/384)*((dr4*p_2_1)/(p_2_2))*(p_2_3)
     p_3_1 = pow(dr4/dr2,2)
-    p_3_2 = 65.00 +68.00*pow(alpha,2)
+    p_3_2 = 67.00 +68.00*pow(alpha,2)
     Parcela_3 = (1/2304)*(p_3_1)*(p_3_2)
     p_4_1 = dr3*dr5
     p_4_2 = pow(dr2,2)
