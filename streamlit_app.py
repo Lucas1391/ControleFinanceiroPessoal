@@ -1,164 +1,157 @@
-#======================Bibliotecas Necessárias====================================================
-import numpy as np
-import sympy as sy
-from sympy import solve,log
-import math as mt
-from scipy.special import lambertw
-import numpy as np
-import pandas as pd
 import streamlit as st
-sy.init_printing(scale=0.1,forecolor='black')
-r = sy.Symbol('r')
-x = sy.Symbol("x")
+import pandas as pd
+import datetime
+import matplotlib.pyplot as plt
+import os
 
-#======================Definindo Funções do Problema===============================================
-#Definindo Potencial 
-def pot_ef(r,M,l):
-    p = -6.00*M/(pow(r,3))
-    V = (1.00 - (2.00*M)/r)*((l*(l+1.00)/(pow(r,2))) + p) 
-    return V
-#Coordenada Tortoise
-def Turtle(r,M):
-    return r+2.00*M*sy.log(r/(2*M)-1.00)
-#Inversa de r 
-def inv(x,M):
-    eq = Turtle(r,M)-x
-    resultado = solve(eq,r)[1]
-    resultado = sy.simplify(resultado)
-    return resultado
-#Potencial Definido em r*
-def pot_ef_Turtose(inversa,M,l,x):
-    r_t = inversa
-    Valor_Pot = pot_ef(r_t,M,l)
-    return sy.simplify(Valor_Pot)
-#=======================Definindo Funções para Cálculo de Derivada======================================
-def DerivadaPrimeira(Potencial,x):
-    return sy.diff(Potencial,x,1)
-def DerivadaSegunda(Potencial,x):
-    return sy.diff(Potencial,x,2)
-def DerivadaTerceira(Potencial,x):
-    return sy.diff(Potencial,x,3)
-def DerivadaQuarta(Potencial,x):
-    return sy.diff(Potencial,x,4)
-def DerivadaQuinta(Potencial,x):
-    return sy.diff(Potencial,x,5)
-def DerivadaSexta(Potencial,x):
-    return sy.diff(Potencial,x,6)
-#==========================Definindo Funções para o Cálculo dos Modos====================================
-def Delta(r,M,l,dr4,dr2,dr3,n):
-    alpha = n + 0.5
-    P_1_1 = dr4/dr2
-    P_1_2 = 0.25 + pow(alpha,2)
-    Parcela_1 = (1/8)*(P_1_1)*(P_1_2)
-    P_2_1 = pow(dr3/dr2,2)
-    P_2_2 = 7.00+60.00*(pow(alpha,2))
-    Parcela_2 = (1/288)*(P_2_1)*(P_2_2)
-    Delta_valor = Parcela_1-Parcela_2
-    return  Delta_valor
-def Omega(r,M,l,dr2,dr3,dr4,dr5,dr6,n):
-    alpha = n + 0.5
-    #Calculando componentes do Omega
-    p_1_1 = pow(dr3/dr2,4)
-    p_1_2 = 77.00+188.00*(pow(alpha,2))
-    Parcela_1 =  (5/6912)*(p_1_1)*(p_1_1)
-    p_2_1 = pow(dr3,2)
-    p_2_2 = pow(dr2,3)
-    p_2_3 = 51.00 + 100.00*pow(alpha,2)
-    Parcela_2 = (1/384)*((dr4*p_2_1)/(p_2_2))*(p_2_3)
-    p_3_1 = pow(dr4/dr2,2)
-    p_3_2 = 67.00 +68.00*pow(alpha,2)
-    Parcela_3 = (1/2304)*(p_3_1)*(p_3_2)
-    p_4_1 = dr3*dr5
-    p_4_2 = pow(dr2,2)
-    p_4_3 = 19.00 + 28.00*pow(alpha,2)
-    Parcela_4 = (1/288)*(p_4_1/(p_4_2))*(p_4_3)
-    p_5_1 = dr6/dr2
-    p_5_2 = 5.00 + 4.00*pow(alpha,2)
-    Parcela_5 = (1/288)*(p_5_1)*(p_5_2)
-    Omega_1 = 1/(-2.00*dr2)
-    Valor_Omega = (Omega_1)*(Parcela_1-Parcela_2+Parcela_3 + Parcela_4-Parcela_5)
-    return Valor_Omega
-def ModosQuaseNormais(Potencial1,x0,n,l,Delta1,Omega1,dr2_1):
-    alpha = n + 0.5
-    Potencial_0 = Potencial1
-    Parte_1_1 = pow(-2.00*dr2_1,0.5)
-    Parte_1 = Potencial_0 + Delta1
-    Parte_2_1 = pow(-2.00*dr2_1,0.5) 
-    Parte_2 = -1.00j*(alpha)*(Parte_2_1)*(1.00+Omega1)
-    Frequencia = np.array([Parte_1.subs(x,x0),Parte_2.subs(x,x0)])
-    a = Frequencia[0]
-    b = Frequencia[1] 
-    if type(a) is sy.core.numbers.Float:
-        b = Frequencia[1]/1.00j
-    else:
-        a = Frequencia[0]/1.00j
-    a = round(float(a),8)
-    b = round(float(b),8)
-    w = complex(a,b)
-    return np.sqrt(w)
-#Definindo Função Principal para Determinar Módulos
-def Main(n,l,M):
-    Potencial = pot_ef(r,M,l)
-    Derivada_primeira = DerivadaPrimeira(Potencial,r)
-    pontos_criticos = solve(Derivada_primeira,r)
-    ponto_max = pontos_criticos[1]
-    x0  = Turtle(r,M).subs(r,ponto_max)
-    inversa = inv(x,M)
-    Potencial = pot_ef_Turtose(inversa,M,l,x)
-    Potencial1 = (pot_ef_Turtose(inversa,M,l,x)).subs(x,x0)
-    #Calculando derivada no ponto dado
-    dr1 = (DerivadaPrimeira(Potencial,x))
-    dr2 =  (DerivadaSegunda(Potencial,x))
-    dr3 = (DerivadaTerceira(Potencial,x))
-    dr4 = (DerivadaQuarta(Potencial,x))
-    dr5 = (DerivadaQuinta(Potencial,x))
-    dr6 = (DerivadaSexta(Potencial,x))
-    dr22 = (DerivadaSegunda(Potencial,x)).subs(x,x0)
-    Omega1 = (Omega(x,M,l,dr2,dr3,dr4,dr5,dr6,n))
-    Delta1 =(Delta(x,M,l,dr4,dr2,dr3,n))
-    w =  (ModosQuaseNormais(Potencial1,x0,n,l,Delta1,Omega1,dr2))
-    return w
+
 def Resultado(dados):
-    st.subheader("Planilha de Resultados")
+    #st.subheader("Planilha de Resultados")
     DataFrame = st.dataframe(dados)
     dados = dados.to_csv()
     Mensagem = st.write("Clique no Botão abaixo e faça o Download do arquivo")
     Botao = st.download_button( label="Planilha de Resultados",file_name='Resultado.csv', data = dados)
     return DataFrame,Mensagem,Botao
-#Input do Método 
-st.header("APLICAÇÃO WEB PARA CÁLCULO DE MODOS QUASINORMAIS DE BURACOS NEGROS DE SCHWARZSCHILD")
-M = st.number_input('Digite o Valor da Massa do Buraco Negro : ')
-n = st.slider("Selecione a quantidade de valores de n desejada : ")
-Modos_Trabalho = pd.DataFrame()
-indice_n = []
-indice_l = []
-indice_z = []
-coluna1 = []
-coluna2 = []
-if n  is not 0:
-    st.write("A Quantidade de valores de n é ", n)
-    for q in range(0,n):
-        indice_n.append(q)
-l = st.slider("Selecione a quantidade de valores de l desejada : ")
-if l is not  0:
-    st.write("A Quantidade de valores de l é ", l)
-    for p in range(2,l+2):
-        indice_l.append(p)
-    for i in indice_n:
-        for j in indice_l:
-            coluna1.append(i)
-            coluna2.append(j)
-            indice_z.append(Main(i,j,M))
-    Modos_Trabalho['n'] =  coluna1
-    Modos_Trabalho['l'] =  coluna2
-    Modos_Trabalho['z'] = indice_z
-if len(Modos_Trabalho)!=0:
-    st.write("Aguardando Cálculos!")
-    Resultado(Modos_Trabalho)
+# Função para verificar e resetar os dados se for um novo mês
+def verificar_resetar_planilha():
+    try:
+        # Carregar as transações existentes
+        df = pd.read_csv("transacoes.csv")
+        
+        # Verificar o mês da última transação
+        df['Data'] = pd.to_datetime(df['Data'])
+        ultimo_mes = df['Data'].max().month
+        
+        # Obter o mês atual
+        mes_atual = datetime.datetime.now().month
+        
+        # Se o mês atual for diferente do último mês registrado, resetar a planilha
+        if ultimo_mes != mes_atual:
+            st.warning("Novo mês detectado. Resetando os dados.")
+            # Resetar a planilha (apagar o conteúdo e manter o cabeçalho)
+            df = pd.DataFrame(columns=["Tipo", "Categoria", "Valor", "Descrição", "Data"])
+            df.to_csv("transacoes.csv", index=False)
+            return df
+        return df
+    except FileNotFoundError:
+        # Caso o arquivo não exista, criamos o DataFrame vazio
+        df = pd.DataFrame(columns=["Tipo", "Categoria", "Valor", "Descrição", "Data"])
+        df.to_csv("transacoes.csv", index=False)
+        return df
+
+# Título do aplicativo
+st.title("Controle de Gastos e Receitas")
+
+# Solicitar nível do usuário
+nivel = st.selectbox("Selecione a opção:", ("Entrada", "Saída"))
+
+# Criar uma lista de categorias para entradas (incluindo salário) e saídas
+categorias_entrada = ["Salário", "Renda Extra"]
+categorias_saida = ["Alimentação", "Transporte", "Saúde", "Lazer", "Outros"]
+
+# Função para adicionar uma nova entrada ou saída
+def adicionar_transacao(tipo, categoria, valor, descricao, data):
+    # Carregar ou resetar o DataFrame
+    df = verificar_resetar_planilha()
     
+    # Adicionar a nova transação ao DataFrame
+    nova_transacao = {
+        "Tipo": tipo,
+        "Categoria": categoria,
+        "Valor": valor,
+        "Descrição": descricao,
+        "Data": data,
+    }
+    df = df.append(nova_transacao, ignore_index=True)
 
+    # Salvar as transações de volta no arquivo CSV
+    df.to_csv("transacoes.csv", index=False)
 
+    return df
 
+# Se o nível selecionado for "Entrada" (Receita)
+if nivel == "Entrada":
+    st.subheader("Adicionar Receita")
 
+    categoria = st.selectbox("Categoria da Receita", categorias_entrada)
+    valor = st.number_input("Valor da Receita", min_value=0.01, format="%.2f")
+    descricao = st.text_input("Descrição da Receita")
+    data = st.date_input("Data da Receita", value=datetime.date.today())
 
+    if st.button("Adicionar Receita"):
+        if valor > 0 and descricao:
+            df = adicionar_transacao("Entrada", categoria, valor, descricao, data)
+            st.success("Receita adicionada com sucesso!")
+            st.write(df)  # Exibir as transações atualizadas
+        else:
+            st.error("Por favor, preencha todos os campos corretamente!")
 
+# Se o nível selecionado for "Saída" (Despesa)
+if nivel == "Saída":
+    st.subheader("Adicionar Despesa")
+
+    categoria = st.selectbox("Categoria da Despesa", categorias_saida)
+    valor = st.number_input("Valor da Despesa", min_value=0.01, format="%.2f")
+    descricao = st.text_input("Descrição da Despesa")
+    data = st.date_input("Data da Despesa", value=datetime.date.today())
+
+    if st.button("Adicionar Despesa"):
+        if valor > 0 and descricao:
+            df = adicionar_transacao("Saída", categoria, valor, descricao, data)
+            st.success("Despesa adicionada com sucesso!")
+            st.write(df)  # Exibir as transações atualizadas
+        else:
+            st.error("Por favor, preencha todos os campos corretamente!")
+
+# Exibir os dados
+st.subheader("Histórico de Transações")
+df = verificar_resetar_planilha()  # Verifica e retorna a planilha atualizada
+#st.write(df)
+Resultado(df)
+
+# Calcular o saldo (entradas - saídas)
+if not df.empty:
+    # Somar as receitas (entradas)
+    df_receitas = df[df["Tipo"] == "Entrada"]
+    total_receitas = df_receitas["Valor"].sum()
+
+    # Somar as despesas (saídas)
+    df_despesas = df[df["Tipo"] == "Saída"]
+    total_despesas = df_despesas["Valor"].sum()
+
+    saldo = total_receitas - total_despesas
+    st.subheader("Resumo Financeiro")
+    st.write(f"Total de Receitas: R${total_receitas:,.2f}")
+    st.write(f"Total de Despesas: R${total_despesas:,.2f}")
+    st.write(f"Saldo: R${saldo:,.2f}")
+
+# Gráficos para visualizar as transações
+if not df.empty:
+    st.subheader("Visualização Gráfica")
+    tipo_grafico = st.radio("Escolha o tipo de gráfico", ("Pizza", "Barra"))
+    
+    if tipo_grafico == "Pizza":
+        df_entradas = df[df["Tipo"] == "Entrada"]
+        df_saidas = df[df["Tipo"] == "Saída"]
+        df_categoria_entradas = df_entradas.groupby("Categoria")["Valor"].sum()
+        df_categoria_saidas = df_saidas.groupby("Categoria")["Valor"].sum()
+        
+        # Gráfico para entradas
+        fig, ax = plt.subplots(1, 2, figsize=(10, 5))
+        df_categoria_entradas.plot.pie(autopct="%1.1f%%", ax=ax[0], title="Entradas")
+        df_categoria_saidas.plot.pie(autopct="%1.1f%%", ax=ax[1], title="Saídas")
+        st.pyplot(fig)
+    
+    elif tipo_grafico == "Barra":
+        df_entradas = df[df["Tipo"] == "Entrada"]
+        df_saidas = df[df["Tipo"] == "Saída"]
+        df_categoria_entradas = df_entradas.groupby("Categoria")["Valor"].sum()
+        df_categoria_saidas = df_saidas.groupby("Categoria")["Valor"].sum()
+        
+        # Gráfico de barras para entradas e saídas
+        fig, ax = plt.subplots(1, 2, figsize=(10, 5))
+        ax[0].bar(df_categoria_entradas.index, df_categoria_entradas.values)
+        ax[0].set_title("Entradas")
+        ax[1].bar(df_categoria_saidas.index, df_categoria_saidas.values)
+        ax[1].set_title("Saídas")
+        st.pyplot(fig)
