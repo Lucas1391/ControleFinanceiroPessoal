@@ -1,5 +1,5 @@
-numpy 
-sympy 
-scipy
+streamlit 
 pandas 
-streamlit
+datetime
+matplotlib
+os
